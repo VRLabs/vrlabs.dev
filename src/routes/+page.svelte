@@ -53,9 +53,8 @@
 			<div class="feature-text">
 				<h2 id="feature-{feature.title}">{feature.title}</h2>
 				<p class="muted">{feature.text}</p>
-				<Button href={feature.href} size="large" round class="feature-button">
+				<Button href={feature.href} size="large" round class="feature-button" icon={feature.icon}>
 					{feature.action}
-					<feature.icon aria-hidden="true" />
 				</Button>
 			</div>
 		</section>

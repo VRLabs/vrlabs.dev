@@ -19,8 +19,8 @@
 <Dialog open={pkg !== null} title={pkg ? `${pkg.name} README` : ''} size="large" {onclose}>
 	{#snippet actions()}
 		{#if pkg?.repoUrl}
-			<Button href={pkg.repoUrl} variant="minimal" size="small">
-				GitHub <ExternalLink size={16} aria-hidden="true" />
+			<Button href={pkg.repoUrl} variant="ghost" color="secondary" size="small" icon={ExternalLink}>
+				GitHub
 			</Button>
 		{/if}
 	{/snippet}
@@ -40,7 +40,7 @@
 					<div class="failed">
 						<img src="/images/cry.webp" alt="" width="96" height="96" />
 						<p class="muted">The README could not be loaded.</p>
-						<Button variant="secondary" round onclick={reset}>Try again</Button>
+						<Button color="secondary" round onclick={reset}>Try again</Button>
 					</div>
 				{/snippet}
 			</svelte:boundary>

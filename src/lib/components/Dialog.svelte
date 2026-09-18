@@ -46,9 +46,16 @@
 			<h2 id={titleId}>{title}</h2>
 			<div class="actions">
 				{@render actions?.()}
-				<Button variant="minimal" size="small" square round onclick={onclose} aria-label="Close">
-					<X aria-hidden="true" />
-				</Button>
+				<Button
+					variant="ghost"
+					color="secondary"
+					size="small"
+					square
+					round
+					onclick={onclose}
+					aria-label="Close"
+					icon={X}
+				/>
 			</div>
 		</header>
 		<div class="content">{@render children()}</div>

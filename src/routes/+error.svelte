@@ -24,7 +24,7 @@
 	<p class="muted">{message}</p>
 	<div class="actions">
 		{#if notFound}
-			<Button variant="secondary" size="large" round onclick={() => history.back()}>Go back</Button>
+			<Button color="secondary" size="large" round onclick={() => history.back()}>Go back</Button>
 			<Button href="/" size="large" round>Home</Button>
 		{:else}
 			<Button size="large" round onclick={() => location.reload()}>Try again</Button>

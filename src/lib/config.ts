@@ -1,4 +1,5 @@
 import type { Component } from 'svelte';
+import type { SVGAttributes } from 'svelte/elements';
 import Discord from './icons/Discord.svelte';
 import Github from './icons/Github.svelte';
 import Patreon from './icons/Patreon.svelte';
@@ -19,7 +20,7 @@ export const navLinks = [
 export interface Social {
 	name: string;
 	href: string;
-	icon: Component<{ size?: number | string }>;
+	icon: Component<SVGAttributes<SVGSVGElement> & { size?: number | string }>;
 }
 
 export const socials: Social[] = [

@@ -1,14 +1,15 @@
 <script lang="ts">
 	import Check from '@lucide/svelte/icons/check';
 	import Copy from '@lucide/svelte/icons/copy';
-	import Button from './Button.svelte';
+	import Button, { type ButtonColor, type ButtonSize, type ButtonVariant } from './Button.svelte';
 
 	interface Props {
 		/** Text to copy, or a function that produces it when clicked */
 		text: string | (() => Promise<string>);
 		label?: string;
-		variant?: 'primary' | 'secondary' | 'outlined' | 'minimal';
-		size?: 'large' | 'medium' | 'small';
+		variant?: ButtonVariant;
+		color?: ButtonColor;
+		size?: ButtonSize;
 		round?: boolean;
 		disabled?: boolean;
 	}
@@ -16,7 +17,8 @@
 	let {
 		text,
 		label = 'Copy to clipboard',
-		variant = 'secondary',
+		variant = 'filled',
+		color = 'secondary',
 		size = 'medium',
 		round = false,
 		disabled = false
@@ -59,6 +61,7 @@
 
 <Button
 	{variant}
+	{color}
 	{size}
 	{round}
 	{disabled}
@@ -67,10 +70,5 @@
 	title={label}
 	aria-label={copied ? 'Copied' : label}
 	aria-live="polite"
->
-	{#if copied}
-		<Check aria-hidden="true" />
-	{:else}
-		<Copy aria-hidden="true" />
-	{/if}
-</Button>
+	icon={copied ? Check : Copy}
+/>

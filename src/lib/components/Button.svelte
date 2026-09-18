@@ -1,9 +1,20 @@
+<script module lang="ts">
+	import type { Component } from 'svelte';
+
+	export type ButtonVariant = 'filled' | 'outlined' | 'ghost' | 'minimal';
+	export type ButtonColor = 'primary' | 'secondary' | 'destructive' | 'success';
+	export type ButtonSize = 'large' | 'medium' | 'small';
+	export type ButtonIcon = Component<{ 'aria-hidden'?: boolean | 'true' | 'false' }>;
+</script>
+
 <script lang="ts">
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
 
 	interface BaseProps {
-		variant?: 'primary' | 'secondary' | 'outlined' | 'minimal' | 'destructive';
-		size?: 'large' | 'medium' | 'small';
+		variant?: ButtonVariant;
+		color?: ButtonColor;
+		size?: ButtonSize;
+		icon?: ButtonIcon;
 		square?: boolean;
 		round?: boolean;
 		expand?: boolean;
@@ -17,8 +28,10 @@
 	type Props = ButtonProps | LinkProps;
 
 	let {
-		variant = 'primary',
+		variant = 'filled',
+		color = 'primary',
 		size = 'medium',
+		icon: Icon,
 		square = false,
 		round = false,
 		expand = false,
@@ -37,6 +50,7 @@
 	target={external ? '_blank' : undefined}
 	class={[
 		'button',
+		color,
 		variant,
 		size,
 		square && 'square',
@@ -47,6 +61,9 @@
 	{...rest}
 >
 	{@render children?.()}
+	{#if Icon}
+		<Icon aria-hidden="true" />
+	{/if}
 </svelte:element>
 
 <style>
@@ -74,20 +91,15 @@
 			border-color var(--duration),
 			color var(--duration);
 
-		&:hover {
-			text-decoration: none;
-			background-color: color-mix(in oklch, var(--color-text-accent) 88%, var(--color-text));
-			border-color: color-mix(in oklch, var(--color-text-accent) 88%, var(--color-text));
-		}
-
 		&:focus-visible {
 			outline-style: solid;
 			outline-width: 2px;
 			outline-offset: 1px;
+			outline-color: var(--outline-color, var(--background-color));
 		}
 
 		&:active {
-			transform: translateY(1px);
+			transform: scale(0.95, 0.97);
 		}
 
 		& :global(svg) {
@@ -104,55 +116,69 @@
 		}
 	}
 
+	.primary {
+		--background-color: var(--color-text-accent);
+		--text-color: var(--color-text-inverse);
+	}
+
 	.secondary {
-		border-color: var(--color-bg-higher);
-		background-color: var(--color-bg-higher);
-		color: var(--color-text);
-		outline-color: var(--color-text-accent);
+		--background-color: var(--color-bg-higher);
+		--text-color: var(--color-text);
+		--outline-color: var(--color-text-accent);
 
-		&:hover {
-			background-color: var(--color-border-high);
-			border-color: var(--color-border-high);
-		}
-	}
-
-	.outlined {
-		background-color: transparent;
-		color: var(--color-text-accent);
-
-		&:hover {
-			background-color: color-mix(in oklch, var(--color-text-accent) 12%, transparent);
-			border-color: var(--color-text-accent);
-		}
-	}
-
-	.minimal {
-		border-color: transparent;
-		background-color: transparent;
-		color: var(--color-text-high);
-
-		&:hover {
-			background-color: color-mix(in oklch, var(--color-text) 10%, transparent);
-			border-color: transparent;
-			color: var(--color-text);
+		&.outlined,
+		&.ghost,
+		&.minimal {
+			--background-color: var(--color-text);
 		}
 	}
 
 	.destructive {
-		border-color: var(--color-error);
-		background-color: var(--color-error);
-		color: var(--color-base-7);
-		outline-color: var(--color-error);
+		--background-color: var(--color-error);
+		--text-color: var(--color-text-inverse);
+	}
 
-		&:hover {
-			background-color: color-mix(in oklch, var(--color-error) 85%, var(--color-text));
-			border-color: color-mix(in oklch, var(--color-error) 85%, var(--color-text));
+	.success {
+		--background-color: var(--color-success);
+		--text-color: var(--color-text-inverse);
+	}
+
+	.filled {
+		background-color: var(--background-color);
+		color: var(--text-color);
+		border-color: var(--background-color);
+	}
+
+	.outlined {
+		background-color: transparent;
+		color: var(--background-color);
+		border-color: var(--background-color);
+	}
+
+	.ghost {
+		background-color: transparent;
+		color: var(--background-color);
+		border-color: transparent;
+	}
+
+	.minimal {
+		background-color: transparent;
+		color: var(--background-color);
+		border-color: transparent;
+	}
+
+	.filled {
+		&:hover:not(:active) {
+			background-color: color-mix(in oklch, var(--background-color) 95%, black);
+			border-color: color-mix(in oklch, var(--background-color) 95%, black);
 		}
 	}
 
-	@media (prefers-color-scheme: dark) {
-		.destructive {
-			color: var(--color-base-0);
+	.outlined,
+	.ghost {
+		&:hover:not(:active),
+		&:focus-visible {
+			background-color: color-mix(in oklch, var(--background-color) 15%, transparent);
 		}
 	}
 

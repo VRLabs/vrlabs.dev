@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ArrowDownUp from '@lucide/svelte/icons/arrow-down-up';
 	import type { SortKey } from '$lib/sort';
-	import Chip from './Chip.svelte';
+	import Button from './Button.svelte';
 
 	interface Props {
 		value: SortKey;
@@ -16,6 +16,7 @@
 		{ key: 'quest', label: 'Quest', description: 'Show Quest compatible packages first' }
 	];
 
+	/** Pressing the active option again returns to the default order */
 	function toggle(key: SortKey) {
 		value = value === key ? 'default' : key;
 	}
@@ -24,13 +25,15 @@
 <div class="sort" role="group" aria-label="Sort packages">
 	<ArrowDownUp size={18} aria-hidden="true" />
 	{#each options as option (option.key)}
-		<Chip
-			active={value === option.key}
+		<Button
+			color={value === option.key ? 'primary' : 'secondary'}
+			size="small"
+			aria-pressed={value === option.key}
 			title={option.description}
 			onclick={() => toggle(option.key)}
 		>
 			{option.label}
-		</Chip>
+		</Button>
 	{/each}
 </div>
 

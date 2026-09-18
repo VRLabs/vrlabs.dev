@@ -107,14 +107,12 @@
 			</dl>
 			<div class="actions">
 				{#if data.listing}
-					<Button size="large" onclick={addToVcc}>
-						<Download aria-hidden="true" />
-						Add to VCC
-					</Button>
+					<Button size="large" onclick={addToVcc} icon={Download}>Add to VCC</Button>
 					<CopyButton text={data.listing.url} label="Copy listing URL" size="large" />
 				{/if}
 				<Button
-					variant={inCart ? 'outlined' : 'secondary'}
+					variant={inCart ? 'outlined' : 'filled'}
+					color={inCart ? 'primary' : 'secondary'}
 					size="large"
 					onclick={toggleCart}
 					aria-pressed={inCart}
@@ -122,15 +120,12 @@
 					{inCart ? 'Remove from VCC list' : 'Add to VCC list'}
 				</Button>
 				{#if pkg.unityPackageUrl}
-					<Button href={pkg.unityPackageUrl} target="_self" variant="secondary" size="large">
+					<Button href={pkg.unityPackageUrl} target="_self" color="secondary" size="large">
 						Download .unitypackage
 					</Button>
 				{/if}
 				{#if pkg.repoUrl}
-					<Button href={pkg.repoUrl} variant="secondary" size="large">
-						<Github />
-						GitHub
-					</Button>
+					<Button href={pkg.repoUrl} color="secondary" size="large" icon={Github}>GitHub</Button>
 				{/if}
 			</div>
 			{#if pkg.dependencies.length}
@@ -160,7 +155,7 @@
 				{#snippet failed(_error, reset)}
 					<div class="failed">
 						<p class="muted">The README could not be loaded.</p>
-						<Button variant="secondary" round onclick={reset}>Try again</Button>
+						<Button color="secondary" round onclick={reset}>Try again</Button>
 					</div>
 				{/snippet}
 			</svelte:boundary>

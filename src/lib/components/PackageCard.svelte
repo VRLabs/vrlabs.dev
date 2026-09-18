@@ -75,7 +75,7 @@
 		{/if}
 		<div class="corner start">
 			<Button
-				variant="secondary"
+				color="secondary"
 				size="small"
 				square
 				round
@@ -83,25 +83,25 @@
 				onclick={() => onInfo(pkg)}
 				aria-label="Show README of {pkg.name}"
 				title="README"
-			>
-				<Info aria-hidden="true" />
-			</Button>
+				icon={Info}
+				style="--button-icon-size: 24px"
+			/>
 			{#if pkg.repoUrl}
 				<Button
 					href={pkg.repoUrl}
-					variant="secondary"
+					color="secondary"
 					size="small"
 					square
 					round
 					aria-label="Open the GitHub repository of {pkg.name}"
 					title="GitHub"
-				>
-					<Github />
-				</Button>
+					icon={Github}
+					style="--button-icon-size: 24px"
+				/>
 			{/if}
 			{#if pkg.quest === 'full' || pkg.quest === 'partial'}
 				<span class={['quest', pkg.quest]} title={questLabels[pkg.quest]}>
-					<Meta size={14} />
+					<Meta size={18} />
 					<span class="visually-hidden">{questLabels[pkg.quest]}</span>
 				</span>
 			{/if}
@@ -134,7 +134,7 @@
 		<p class="description muted">{pkg.description}</p>
 		<div class="actions">
 			<Button
-				variant={inCart ? 'outlined' : 'primary'}
+				variant={inCart ? 'outlined' : 'filled'}
 				expand
 				onclick={toggleCart}
 				aria-pressed={inCart}
@@ -145,13 +145,12 @@
 				<Button
 					href={pkg.unityPackageUrl}
 					target="_self"
-					variant="secondary"
+					color="secondary"
 					square
 					aria-label="Download {pkg.name} as .unitypackage"
 					title="Download .unitypackage"
-				>
-					<Download aria-hidden="true" />
-				</Button>
+					icon={Download}
+				/>
 			{/if}
 		</div>
 	</div>

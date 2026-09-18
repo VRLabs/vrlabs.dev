@@ -62,13 +62,12 @@
 						<li>
 							<span class="item-name">{item.name}</span>
 							<Button
-								variant="destructive"
+								color="destructive"
 								square
 								onclick={() => cart.remove(item.id)}
 								aria-label="Remove {item.name} from the list"
-							>
-								<Trash2 aria-hidden="true" />
-							</Button>
+								icon={Trash2}
+							/>
 						</li>
 					{/each}
 				</ul>
@@ -84,7 +83,8 @@
 			</Button>
 			<CopyButton text={copyLink} label="Copy VCC link" disabled={cart.count === 0} />
 			<Button
-				variant="minimal"
+				variant="ghost"
+				color="secondary"
 				disabled={cart.count === 0}
 				onclick={() => cart.clear()}
 				aria-label="Clear the list"

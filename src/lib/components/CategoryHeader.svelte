@@ -18,7 +18,7 @@
 <header class="category-header">
 	<h2 id="category-{category.id}">{category.name}</h2>
 	<div class="actions">
-		<Button variant="secondary" onclick={() => addToVcc}>Add category to VCC</Button>
+		<Button color="secondary" onclick={addToVcc}>Add category to VCC</Button>
 		<CopyButton text={category.listingUrl} label="Copy listing URL" />
 	</div>
 </header>
