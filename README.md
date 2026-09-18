@@ -7,103 +7,68 @@
 
 ![Homepage](https://github.com/VRLabs/vrlabs.dev/assets/101019309/63ba3f70-c0f8-422b-9f67-fd32440ec176)
 
-
 </div>
 
 ---
 
-## Tech Stack
+## URL parameters
 
-### Frontend
+The packages page uses a few query parameters, all of which accept the parameter multiple times or a comma separated list:
 
-* Astro
-* Tailwind
-* Vanilla JS
-
-### Backend
-
-* .NET
-* Postgres
-* FastEndpoints
-
-### Other
-
-* Icons from [Glyphs](https://glyphs.fyi)
-* Markdown parser from [Marked](https://marked.js.org)
-* Markdown stylesheet from [Sindresorhus](https://github.com/sindresorhus/github-markdown-css)
+| Parameter    | Effect                                                                                       |
+| ------------ | -------------------------------------------------------------------------------------------- |
+| `?package=`  | Opens the Creator Companion with a listing containing these packages and their dependencies. |
+| `?category=` | Opens the Creator Companion with the listing of these categories.                            |
+| `?cart=`     | Adds these packages to the VCC list on the page instead.                                     |
 
 ## Running locally
 
-If you dont already have NVM installed, download the latest ``nvm-setup.zip`` from [here](https://github.com/coreybutler/nvm-windows/releases), then extract the zip and run the installer.
+Requires Node 24 and [pnpm](https://pnpm.io).
 
-If you are on a Unix based machine like Linux or MacOS, run the following command to install NVM:
-
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```sh
+pnpm install
+pnpm dev        # dev server on http://localhost:5173
+pnpm build      # production build into build/
+pnpm start      # run the production build
+pnpm check      # type-check the Svelte code
+pnpm lint       # prettier and eslint
+pnpm format     # format everything
 ```
 
-You can verify that NVM is installed by running:
+### Environment variables
 
-```bash
-nvm --version
+Copy `.env.example` to `.env` and edit the values:
+
+| Variable       | Purpose                                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `API_URL`      | Base URL of the VRLabs package API, defaults to `https://api.vrlabs.dev`. Point it at the test API while developing. |
+| `ORIGIN`       | Public origin of the site, used for canonical URLs.                                                                  |
+| `GITHUB_TOKEN` | Optional fine-grained personal access token so download counts can be fetched more often.                            |
+| `PORT`         | Port of the Node server, defaults to 3000.                                                                           |
+
+To create the GitHub token open _Settings › Developer settings › Personal access tokens › Fine-grained tokens_, generate a token with **Public repositories (read-only)** access, and set it as `GITHUB_TOKEN`. Release download counts are cached for two hours, so the site stays well below the limit even without one.
+
+## Deployment
+
+`compose.yaml` builds the site with the `Dockerfile` and runs it with `node build`. It reads the environment variables above from `.env`, where `PORT` is the port published on the host:
+
+```sh
+docker compose up -d --build
+docker compose logs -f
 ```
 
-After installing NVM run the following commands in the directory of the project:
-
-* ``nvm use`` to switch to the required Node version.
-  * If the required version is not installed, you will be prompted to run the ``nvm install`` command.
-  * After installing the required version, run ``nvm use`` again
-* ``npm install`` to install the dependencies
-
-To start testing locally you can use the following commands:
-
-* ``npm run dev`` to start a local dev server at ``localhost:4321``
-* ``npm run build`` to create a build of the website
-* ``npm run preview`` to preview the build at ``localhost:4321``
-
-If you are using VSCode you may be prompted to install some extensions which are recommended to be used when working on this project. If you are not using VSCode, please check if the most important extensions are available for your editor:
-
-* [Astro](https://docs.astro.build/en/editor-setup/)
-* [Tailwind](https://tailwindcss.com/docs/editor-setup)
-* [Prettier](https://prettier.io/docs/en/editors.html)
-
-This step is optional but HIGHLY recommended.
-
-## Project Structure
-
-The project is built on a vertical slice architecture, meaning every component is grouped with its related files.
-
-```c
-root
-├── public
-├── src
-│   ├── components
-│   │   └── component
-│   │       ├── file.astro
-│   │       ├── file.css
-│   │       └── file.js
-│   ├── layouts
-│   ├── pages
-│   └── styles
-└── package.json
-```
-
-The sub-directory ``pages`` is mandatory. Every  ``astro`` ``html`` ``md`` and ``mdx`` file in this folder will be turned into an endpoint on the site corresponding to the file name.
-
-Static assets like images or fonts can be placed in the ``public`` directory, as well as special files such as ``robots.txt`` and ``manifest.webmanifest``. Do not place CSS or JS files here, as they will be excluded from the bundle and optimization processes.
-
-The ``package.json`` file contains all ``dependencies`` and ``devDependencies`` of the project. Try not to install packages as ``devDependencies`` unless there is a specific reason to do so, as Astro only runs throgh all ``dependencies`` at build time and will not include packages from ``devDependencies`` in the final build.
+To update, pull the new code and run `docker compose up -d --build` again. The container has a health check on `/`, so `docker compose ps` shows whether the site is serving.
 
 ​
 
 <div align="center">
 
-[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/VRLabs.png" width="50" height="50">](https://vrlabs.dev "VRLabs")
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/VRLabs.png" width="50" height="50">](https://vrlabs.dev 'VRLabs')
 <img src="https://github.com/VRLabs/Resources/raw/main/Icons/Empty.png" width="10">
-[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Discord.png" width="50" height="50">](https://discord.vrlabs.dev/ "VRLabs")
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Discord.png" width="50" height="50">](https://discord.vrlabs.dev/ 'VRLabs')
 <img src="https://github.com/VRLabs/Resources/raw/main/Icons/Empty.png" width="10">
-[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Patreon.png" width="50" height="50">](https://patreon.vrlabs.dev/ "VRLabs")
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Patreon.png" width="50" height="50">](https://patreon.vrlabs.dev/ 'VRLabs')
 <img src="https://github.com/VRLabs/Resources/raw/main/Icons/Empty.png" width="10">
-[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Twitter.png" width="50" height="50">](https://twitter.com/vrlabsdev "VRLabs")
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Twitter.png" width="50" height="50">](https://twitter.com/vrlabsdev 'VRLabs')
 
 </div>

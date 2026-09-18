@@ -1,0 +1,177 @@
+:root {
+	--_base-h: 264;
+	--_base-c-0: 0;
+	--_base-c-1: 0.0098;
+	--_base-c-2: 0.0124;
+	--_base-c-3: 0.027999999999999997;
+	--_base-c-4: 0.0258;
+	--_base-c-5: 0.027200000000000002;
+	--_base-c-6: 0.0258;
+	--_base-c-7: 0.0134;
+	--_acc-h: 254;
+	--_acc-c-0: 0.08277005095815615;
+	--_acc-c-1: 0.1655401019163123;
+	--_acc-c-2: 0.08644977754412501;
+	--_acc-c-3: 0.05985076498396022;
+	--_acc-c-4: 0.16872356541470293;
+	--_acc-c-5: 0.10187083194849988;
+
+	--color-base-0: oklch(17% var(--_base-c-7) var(--_base-h));
+	--color-base-1: oklch(25% var(--_base-c-6) var(--_base-h));
+	--color-base-2: oklch(32% var(--_base-c-5) var(--_base-h));
+	--color-base-3: oklch(46% var(--_base-c-4) var(--_base-h));
+	--color-base-4: oklch(64% var(--_base-c-3) var(--_base-h));
+	--color-base-5: oklch(90% var(--_base-c-2) var(--_base-h));
+	--color-base-6: oklch(95% var(--_base-c-1) var(--_base-h));
+	--color-base-7: oklch(100% var(--_base-c-0) var(--_base-h));
+
+	--color-accent-low: oklch(88% var(--_acc-c-3) var(--_acc-h));
+	--color-accent: oklch(53% var(--_acc-c-4) var(--_acc-h));
+	--color-accent-high: oklch(32% var(--_acc-c-5) var(--_acc-h));
+	--color-text-accent: var(--color-accent);
+
+	--color-info-low: oklch(87.897% 0.0555 279.573);
+	--color-info: oklch(53.03% 0.24331 270.147);
+	--color-info-high: oklch(31.865% 0.1766 267.138);
+
+	--color-success-low: oklch(95.604% 0.06419 135.506);
+	--color-success: oklch(79.407% 0.25035 139.5);
+	--color-success-high: oklch(44.893% 0.13293 138.416);
+
+	--color-warning-low: oklch(94.216% 0.05193 85.101);
+	--color-warning: oklch(82.426% 0.15029 82.564);
+	--color-warning-high: oklch(46.236% 0.09033 79.825);
+
+	--color-error-low: oklch(89.949% 0.04928 355.498);
+	--color-error: oklch(56% 0.1557 29);
+	--color-error-high: oklch(41.268% 0.15511 8.446);
+
+	--color-bg-gradient-top: oklch(92% 0 var(--_acc-h));
+	--color-bg-gradient-bottom: oklch(100% 0 var(--_acc-h));
+	--color-bg-grid: oklch(40% 0.06 var(--_acc-h));
+
+	--color-text: var(--color-base-0);
+	--color-text-high: var(--color-base-3);
+	--color-text-inverse: var(--color-base-7);
+
+	--color-bg: var(--color-base-7);
+	--color-bg-high: var(--color-base-6);
+	--color-bg-higher: var(--color-base-5);
+	--color-bg-nav: color-mix(in oklch, var(--color-bg), var(--color-bg-high) 25%);
+
+	--color-border: var(--color-base-5);
+	--color-border-high: var(--color-base-4);
+	--border-width: 1px;
+	--border-style: var(--border-width) solid var(--color-border);
+	--border-style-high: var(--border-width) solid var(--color-border-high);
+	--border-style-accent: var(--border-width) solid var(--color-text-accent);
+
+	--focus-ring: 2px solid var(--color-text-accent);
+	--focus-ring-error: 2px solid var(--color-error);
+
+	--font-system:
+		ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+		'Segoe UI Symbol', 'Noto Color Emoji';
+	--font-sans: 'PT Sans', var(--font-system);
+	--font-heading: 'Novecento', var(--font-sans);
+	--font-mono:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+		monospace;
+
+	--font-4xl: 5rem;
+	--font-3xl: 3.5rem;
+	--font-2xl: 2.25rem;
+	--font-xl: 1.5rem;
+	--font-lg: 1.2rem;
+	--font-md: 1rem;
+	--font-sm: 0.9rem;
+	--font-xs: 0.8rem;
+	--font-2xs: 0.7rem;
+	--font-3xs: 0.6rem;
+
+	--weight-extra: 700;
+	--weight-bold: 600;
+	--weight-semi: 500;
+	--weight-body: 400;
+
+	--line-height: 1.5;
+
+	--s-0-5: 0.125rem;
+	--s-1: 0.25rem;
+	--s-1-5: 0.375rem;
+	--s-2: 0.5rem;
+	--s-2-5: 0.625rem;
+	--s-3: 0.75rem;
+	--s-4: 1rem;
+	--s-5: 1.25rem;
+	--s-6: 1.5rem;
+	--s-8: 2rem;
+	--s-10: 2.5rem;
+	--s-12: 3rem;
+	--s-16: 4rem;
+	--s-24: 6rem;
+	--s-32: 8rem;
+
+	--layout-nav-height: 64px;
+	--layout-max-width: 72rem;
+	--layout-menu-width: 16rem;
+	--layout-page-padding: var(--s-4);
+
+	--field-size-xs: 1.5rem;
+	--field-size-sm: 2rem;
+	--field-size: 2.5rem;
+	--field-size-lg: 3rem;
+	--field-size-icon: 18px;
+	--field-padding: 0.6rem;
+
+	--selector-size-xs: 1rem;
+	--selector-size-sm: 1.25rem;
+	--selector-size: 1.5rem;
+	--selector-size-lg: 1.75rem;
+
+	--radius-box: 8px;
+	--radius-field: 4px;
+	--radius-selector: 4px;
+	--radius-full: 99999px;
+
+	--duration: 200ms;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-base-0: oklch(100% var(--_base-c-0) var(--_base-h));
+		--color-base-1: oklch(100% var(--_base-c-1) var(--_base-h));
+		--color-base-2: oklch(100% var(--_base-c-2) var(--_base-h));
+		--color-base-3: oklch(74% var(--_base-c-3) var(--_base-h));
+		--color-base-4: oklch(56% var(--_base-c-4) var(--_base-h));
+		--color-base-5: oklch(42% var(--_base-c-5) var(--_base-h));
+		--color-base-6: oklch(35% var(--_base-c-6) var(--_base-h));
+		--color-base-7: oklch(27% var(--_base-c-7) var(--_base-h));
+
+		--color-accent-low: oklch(26% var(--_acc-c-0) var(--_acc-h));
+		--color-accent: oklch(52% var(--_acc-c-1) var(--_acc-h));
+		--color-accent-high: oklch(83% var(--_acc-c-2) var(--_acc-h));
+		--color-text-accent: var(--color-accent-high);
+
+		--color-info-low: oklch(26% 0.09 275);
+		--color-info: oklch(52% 0.27 275);
+		--color-info-high: oklch(83% 0.08 275);
+
+		--color-success-low: oklch(35% 0.08 135);
+		--color-success: oklch(85% 0.22 135);
+		--color-success-high: oklch(91% 0.12 135);
+
+		--color-warning-low: oklch(38% 0.05 85);
+		--color-warning: oklch(82% 0.14 85);
+		--color-warning-high: oklch(94% 0.05 85);
+
+		--color-error-low: oklch(31% 0.07 10);
+		--color-error: oklch(64.3% 0.18 29);
+		--color-error-high: oklch(87% 0.07 10);
+
+		--color-bg-gradient-top: oklch(35% 0.02 var(--_acc-h));
+		--color-bg-gradient-bottom: oklch(23% 0.02 var(--_acc-h));
+		--color-bg-grid: oklch(87% 0.2 var(--_acc-h));
+	}
+}

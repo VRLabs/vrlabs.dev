@@ -1,0 +1,14 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Output
+/.svelte-kit
+/build
+
+# Static assets
+/static
+
+# Editors
+.vscode

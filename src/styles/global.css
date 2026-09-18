@@ -1,57 +1,183 @@
-@font-face {
-  font-family: "Sans";
-  src: url("/fonts/PTSansRegular.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
-}
-
-@font-face {
-  font-family: "Sans-Bold";
-  src: url("/fonts/PTSansBold.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
-  font-display: block;
-}
-
-@font-face {
-  font-family: "Novecento-Utrabold";
-  src: url("/fonts/NovecentoNarrowUltBold.woff2") format("woff2");
-  font-weight: bolder;
-  font-style: normal;
-  font-display: block;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: break-word;
 }
 
 html {
-  --scrollbar-track: rgb(69 77 89);
-  --scrollbar-thumb: rgb(92 103 120);
-  scrollbar-gutter: stable;
-}
-
-html::-webkit-scrollbar {
-  width: 0.6rem;
-  height: 0.6rem;
-  background: transparent;
-}
-
-html::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 1rem;
-}
-
-html::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-html {
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-  scrollbar-width: thin;
-}
-
-* {
-  min-width: 0;
+	color-scheme: light dark;
+	accent-color: var(--color-text-accent);
+	scrollbar-gutter: stable;
 }
 
 body {
-  -webkit-font-smoothing: antialiased;
+	width: 100%;
+	min-height: 100dvh;
+	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
+	line-height: var(--line-height);
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	font-family: var(--font-sans);
+
+	-moz-osx-font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3 {
+	line-height: 1.2;
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+img,
+svg,
+canvas,
+video,
+audio,
+iframe,
+embed,
+object {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+	color: inherit;
+}
+
+a {
+	color: var(--color-text-accent);
+	text-decoration: none;
+	border-radius: var(--radius-selector);
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+:focus-visible {
+	outline: var(--focus-ring);
+	outline-offset: 1px;
+}
+
+ul,
+ol {
+	padding-inline-start: var(--s-6);
+}
+
+[popover] {
+	inset: unset;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: none;
+	color: inherit;
+}
+
+.scrollbar,
+textarea {
+	/* Firefox, Chrome 121+, Safari 18.2+ */
+	@supports (scrollbar-color: auto) {
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-bg-higher) transparent;
+	}
+
+	/* Legacy */
+	@supports not (scrollbar-color: auto) {
+		&::-webkit-scrollbar,
+		&::-webkit-scrollbar-track {
+			background-color: transparent;
+			height: 14px;
+			width: 14px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background-color: var(--color-base-4);
+			border-radius: var(--radius-full);
+			border: 4px solid transparent;
+			background-clip: content-box;
+		}
+
+		&::-webkit-scrollbar-corner {
+			background-color: transparent;
+		}
+	}
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+.muted {
+	color: var(--color-text-high);
+}
+
+.mono {
+	font-family: var(--font-mono);
+	font-size: var(--font-xs);
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--s-1);
+	height: var(--selector-size);
+	padding: 0 var(--s-2);
+	border-radius: var(--radius-full);
+	background-color: var(--color-bg-higher);
+	color: var(--color-text);
+	font-size: var(--font-2xs);
+	font-weight: var(--weight-extra);
+	line-height: 1;
+	vertical-align: middle;
+	white-space: nowrap;
+
+	& svg {
+		width: var(--selector-size-xs);
+		height: var(--selector-size-xs);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" class="scrollbar">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
+		<link
+			rel="preload"
+			href="%sveltekit.assets%/fonts/PTSansRegular.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="%sveltekit.assets%/fonts/PTSansBold.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="%sveltekit.assets%/fonts/NovecentoNarrowUltBold.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<style>
+			@font-face {
+				font-family: 'PT Sans';
+				src: url('%sveltekit.assets%/fonts/PTSansRegular.woff2') format('woff2');
+				font-weight: 400;
+				font-style: normal;
+				font-display: block;
+			}
+
+			@font-face {
+				font-family: 'PT Sans';
+				src: url('%sveltekit.assets%/fonts/PTSansBold.woff2') format('woff2');
+				font-weight: 700;
+				font-style: normal;
+				font-display: block;
+			}
+
+			@font-face {
+				font-family: 'Novecento';
+				src: url('%sveltekit.assets%/fonts/NovecentoNarrowUltBold.woff2') format('woff2');
+				font-weight: 700;
+				font-style: normal;
+				font-display: block;
+			}
+		</style>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
