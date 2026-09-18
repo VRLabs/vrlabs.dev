@@ -11,7 +11,7 @@ export interface PackageFilters {
 function matchesQuest(pkg: Package, quest: QuestFilter) {
 	if (quest === 'any') return true;
 	if (quest === 'full') return pkg.quest === 'full';
-	return pkg.quest !== 'none';
+	return pkg.quest === 'full' || pkg.quest === 'partial';
 }
 
 function matchesQuery(pkg: Package, needle: string) {

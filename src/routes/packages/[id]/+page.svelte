@@ -33,7 +33,6 @@
 <Seo
 	title={pkg.name}
 	description={pkg.description || `${pkg.name} by VRLabs`}
-	url={data.pageUrl}
 	image={pkg.previewImage ?? site.ogImage}
 />
 
@@ -86,10 +85,12 @@
 						</div>
 					{/if}
 				{/if}
-				<div>
-					<dt>Quest</dt>
-					<dd>{questLabels[pkg.quest]}</dd>
-				</div>
+				{#if pkg.quest !== 'unknown'}
+					<div>
+						<dt>Quest</dt>
+						<dd>{questLabels[pkg.quest]}</dd>
+					</div>
+				{/if}
 				{#if pkg.license}
 					<div>
 						<dt>License</dt>

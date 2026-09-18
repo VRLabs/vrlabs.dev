@@ -82,7 +82,7 @@
 			>
 				Add to VCC
 			</Button>
-			<CopyButton text={copyLink} label="Copy VCC link" />
+			<CopyButton text={copyLink} label="Copy VCC link" disabled={cart.count === 0} />
 			<Button
 				variant="minimal"
 				disabled={cart.count === 0}

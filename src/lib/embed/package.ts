@@ -38,7 +38,7 @@ function truncate(value: string, length: number) {
 function details(pkg: Package, stats: PackageStats | null) {
 	const lines = [`-# Version ${pkg.version}`];
 	if (stats) lines.push(`-# Downloads: ${formatCount(stats.downloads)}`);
-	lines.push(`-# Quest: ${questText[pkg.quest]}`);
+	if (pkg.quest !== 'unknown') lines.push(`-# Quest: ${questText[pkg.quest]}`);
 	return text(lines.join('\n'));
 }
 

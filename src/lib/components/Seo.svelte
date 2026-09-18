@@ -1,17 +1,20 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { site } from '$lib/config';
 
 	interface Props {
 		title: string;
 		description: string;
-		url: string;
+		/** Path of the page, defaults to the current one */
+		path?: string;
 		image?: string;
 	}
 
-	let { title, description, url, image = site.ogImage }: Props = $props();
+	let { title, description, path = page.url.pathname, image = site.ogImage }: Props = $props();
 
 	const fullTitle = $derived(title === site.name ? title : `${title} · ${site.name}`);
-	const imageUrl = $derived(image.startsWith('/') ? `${site.origin}${image}` : image);
+	const url = $derived(`${page.url.origin}${path}`);
+	const imageUrl = $derived(image.startsWith('/') ? `${page.url.origin}${image}` : image);
 </script>
 
 <svelte:head>

@@ -4,11 +4,13 @@
 	import Button from './Button.svelte';
 
 	interface Props {
+		/** Text to copy, or a function that produces it when clicked */
 		text: string | (() => Promise<string>);
 		label?: string;
 		variant?: 'primary' | 'secondary' | 'outlined' | 'minimal';
 		size?: 'large' | 'medium' | 'small';
 		round?: boolean;
+		disabled?: boolean;
 	}
 
 	let {
@@ -16,7 +18,8 @@
 		label = 'Copy to clipboard',
 		variant = 'secondary',
 		size = 'medium',
-		round = false
+		round = false,
+		disabled = false
 	}: Props = $props();
 
 	const copiedDurationMs = 2000;
@@ -25,17 +28,25 @@
 	let busy = $state(false);
 	let timer: ReturnType<typeof setTimeout> | undefined;
 
+	async function write(produce: () => Promise<string>) {
+		if (typeof ClipboardItem === 'undefined') {
+			await navigator.clipboard.writeText(await produce());
+			return;
+		}
+
+		const blob = produce().then((value) => new Blob([value], { type: 'text/plain' }));
+		await navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]);
+	}
+
 	async function copy() {
 		if (busy) return;
 		busy = true;
 
 		try {
-			const value = typeof text === 'string' ? text : await text();
-			if (!value) return;
+			if (typeof text === 'string') await navigator.clipboard.writeText(text);
+			else await write(text);
 
-			await navigator.clipboard.writeText(value);
 			copied = true;
-
 			clearTimeout(timer);
 			timer = setTimeout(() => (copied = false), copiedDurationMs);
 		} catch (error) {
@@ -50,6 +61,7 @@
 	{variant}
 	{size}
 	{round}
+	{disabled}
 	square
 	onclick={copy}
 	title={label}

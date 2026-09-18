@@ -7,7 +7,6 @@ import Twitter from './icons/Twitter.svelte';
 export const site = {
 	name: 'VRLabs',
 	description: 'Bringing free to use tools, systems, and knowledge to VRChat creators',
-	origin: 'https://vrlabs.dev',
 	ogImage: '/images/og-image.png',
 	sourceUrl: 'https://github.com/VRLabs/vrlabs.dev'
 };

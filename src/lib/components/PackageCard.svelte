@@ -99,7 +99,7 @@
 					<Github />
 				</Button>
 			{/if}
-			{#if pkg.quest !== 'none'}
+			{#if pkg.quest === 'full' || pkg.quest === 'partial'}
 				<span class={['quest', pkg.quest]} title={questLabels[pkg.quest]}>
 					<Meta size={14} />
 					<span class="visually-hidden">{questLabels[pkg.quest]}</span>

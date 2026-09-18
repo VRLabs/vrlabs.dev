@@ -12,7 +12,6 @@
 	import ReadmeDialog from '$lib/components/ReadmeDialog.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import VccDialog from '$lib/components/VccDialog.svelte';
-	import { site } from '$lib/config';
 	import { filterCategories, type QuestFilter } from '$lib/filters';
 	import { listParam } from '$lib/format';
 	import { createListing, getCategoryListing, getListing, getStats } from '$lib/packages.remote';
@@ -29,13 +28,18 @@
 	let sort = $state<SortKey>('default');
 	let readmePkg = $state<Package | null>(null);
 
-	async function loadStats(): Promise<StatsMap> {
-		const entries = await Promise.all(
-			packages
-				.filter((pkg) => pkg.repo)
-				.map(async (pkg) => [pkg.id, await getStats(pkg.repo!)] as const)
-		);
-		return new Map(entries);
+	async function loadStats(): Promise<StatsMap | null> {
+		try {
+			const entries = await Promise.all(
+				packages
+					.filter((pkg) => pkg.repo)
+					.map(async (pkg) => [pkg.id, await getStats(pkg.repo!)] as const)
+			);
+			return new Map(entries);
+		} catch (error) {
+			console.error('Could not load download counts', error);
+			return null;
+		}
 	}
 
 	const stats = $derived(needsStats(sort) ? await loadStats() : null);
@@ -81,11 +85,7 @@
 	});
 </script>
 
-<Seo
-	title="Packages"
-	description="A list of all our publicly available packages"
-	url="{site.origin}/packages"
-/>
+<Seo title="Packages" description="A list of all our publicly available packages" />
 
 <PageHeading title="Packages" description="A list of all our publicly available packages" />
 

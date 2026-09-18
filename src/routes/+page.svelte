@@ -35,7 +35,7 @@
 	];
 </script>
 
-<Seo title={site.name} description={site.description} url={site.origin} />
+<Seo title={site.name} description={site.description} />
 
 <PageHeading title={site.name} description={site.description} />
 

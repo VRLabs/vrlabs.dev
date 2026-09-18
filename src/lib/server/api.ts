@@ -37,7 +37,7 @@ function normalizePackage(raw: ApiPackage): Package {
 		unityPackageUrl: isHttpUrl(info.unityPackageUrl) ? info.unityPackageUrl : null,
 		previewImage: isHttpUrl(info.media?.previewImage) ? info.media.previewImage : null,
 		previewGif: isHttpUrl(info.media?.previewGif) ? info.media.previewGif : null,
-		quest: info.questCompatibility ?? 'none',
+		quest: info.questCompatibility ?? 'unknown',
 		dependencies: Object.keys(info.vpmDependencies ?? {}),
 		keywords: info.keywords ?? []
 	};

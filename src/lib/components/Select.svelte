@@ -17,43 +17,59 @@
 
 <div class="select">
 	<select bind:value aria-label={ariaLabel}>
-		<button type="button">
-			<selectedcontent></selectedcontent>
-			<span class="sizer" aria-hidden="true">
-				{#each options as option (option.value)}
-					<span>{option.label}</span>
-				{/each}
-			</span>
-		</button>
 		{#each options as option (option.value)}
 			<option value={option.value}>{option.label}</option>
 		{/each}
 	</select>
+	<span class="sizer" aria-hidden="true">
+		{#each options as option (option.value)}
+			<span>{option.label}</span>
+		{/each}
+	</span>
 	<ChevronsUpDown size={18} class="icon" aria-hidden="true" />
 </div>
 
 <style>
 	.select {
+		--padding-start: var(--field-padding);
+		--padding-end: calc(var(--field-padding) + var(--field-size-icon) + var(--s-1-5));
+
 		position: relative;
-		display: inline-flex;
+		display: inline-grid;
+		font-size: var(--font-sm);
+	}
+
+	select,
+	.sizer {
+		grid-area: 1 / 1;
+		padding: 0 var(--padding-end) 0 var(--padding-start);
+		border: var(--border-style);
+		white-space: nowrap;
 	}
 
 	select {
 		appearance: none;
+		width: 100%;
 		height: var(--field-size);
-		padding: 0 calc(var(--field-padding) + var(--field-size-icon) + var(--s-1-5)) 0
-			var(--field-padding);
-		border: var(--border-style);
 		border-radius: var(--radius-field);
 		background-color: var(--color-bg);
 		color: var(--color-text);
-		font-size: var(--font-sm);
 		cursor: pointer;
 		text-align: start;
 
 		&:focus-visible {
 			outline: var(--focus-ring);
 			outline-offset: 1px;
+		}
+	}
+
+	.sizer {
+		display: grid;
+		visibility: hidden;
+		border-color: transparent;
+
+		& > span {
+			grid-area: 1 / 1;
 		}
 	}
 
@@ -84,31 +100,6 @@
 
 		select::picker-icon {
 			display: none;
-		}
-
-		select > button {
-			display: grid;
-			padding: 0;
-			border: none;
-			background: none;
-			color: inherit;
-			font: inherit;
-			cursor: inherit;
-		}
-
-		selectedcontent,
-		.sizer {
-			grid-area: 1 / 1;
-			white-space: nowrap;
-		}
-
-		.sizer {
-			display: grid;
-			visibility: hidden;
-
-			& > span {
-				grid-area: 1 / 1;
-			}
 		}
 
 		select::picker(select) {

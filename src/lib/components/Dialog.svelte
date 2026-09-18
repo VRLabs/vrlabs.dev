@@ -14,6 +14,8 @@
 
 	let { open, title, onclose, size = 'medium', children, actions }: Props = $props();
 
+	const titleId = $props.id();
+
 	function sync(dialog: HTMLDialogElement) {
 		if (open && !dialog.open) dialog.showModal();
 		else if (!open && dialog.open) dialog.close();
@@ -37,11 +39,11 @@
 	onclick={closeOnBackdropClick}
 	closedby="any"
 	class={[size]}
-	aria-labelledby="dialog-title"
+	aria-labelledby={titleId}
 >
 	<article class="scrollbar">
 		<header>
-			<h2 id="dialog-title">{title}</h2>
+			<h2 id={titleId}>{title}</h2>
 			<div class="actions">
 				{@render actions?.()}
 				<Button variant="minimal" size="small" square round onclick={onclose} aria-label="Close">

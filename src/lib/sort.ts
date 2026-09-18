@@ -1,10 +1,10 @@
-import type { Package, PackageStats, QuestCompatibility } from './types';
+import type { Package, PackageStats, QuestStatus } from './types';
 
 export type SortKey = 'default' | 'name' | 'downloads' | 'updated' | 'quest';
 
 export type StatsMap = Map<string, PackageStats | null>;
 
-const questRank: Record<QuestCompatibility, number> = { full: 0, partial: 1, none: 2 };
+const questRank: Record<QuestStatus, number> = { full: 0, partial: 1, none: 2, unknown: 3 };
 
 export function needsStats(sort: SortKey) {
 	return sort === 'downloads' || sort === 'updated';

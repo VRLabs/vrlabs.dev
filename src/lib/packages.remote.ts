@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { query } from '$app/server';
+import { getRequestEvent, query } from '$app/server';
 import * as v from 'valibot';
 import { buildPackageEmbed } from './embed/package';
 import { serializeEmbed } from './embed/components';
@@ -12,7 +12,6 @@ import {
 	listedRepos,
 	vccAddRepoUrl
 } from './server/api';
-import { origin } from './server/env';
 import { getReadme as fetchReadme } from './server/readme';
 import { getStatsOrNull } from './server/github';
 import type { CustomListing, PackageStats } from './types';
@@ -35,13 +34,14 @@ export const getPackage = query(packageId, async (id) => {
 		createListingViaApi([...pkg.dependencies, pkg.id]).catch((): null => null)
 	]);
 
+	const { origin } = getRequestEvent().url;
 	const pageUrl = `${origin}/packages/${encodeURIComponent(pkg.id)}`;
 	const addToVccUrl = `${origin}/packages?package=${encodeURIComponent(pkg.id)}`;
 	const embed = serializeEmbed(
 		buildPackageEmbed(pkg, stats, { page: pageUrl, addToVcc: addToVccUrl })
 	);
 
-	return { pkg, category, stats, listing, pageUrl, embed };
+	return { pkg, category, stats, listing, embed };
 });
 
 export const getStats = query.batch(repoName, async (repos) => {

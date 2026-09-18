@@ -1,4 +1,5 @@
 export type QuestCompatibility = 'full' | 'partial' | 'none';
+export type QuestStatus = QuestCompatibility | 'unknown';
 
 export interface ApiPackage {
 	name: string;
@@ -38,7 +39,7 @@ export interface Package {
 	unityPackageUrl: string | null;
 	previewImage: string | null;
 	previewGif: string | null;
-	quest: QuestCompatibility;
+	quest: QuestStatus;
 	dependencies: string[];
 	keywords: string[];
 }
