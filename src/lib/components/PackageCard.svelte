@@ -120,7 +120,7 @@
 					{const stats = await getStats(pkg.repo)}
 					<span>{stats ? formatCount(stats.downloads) : '—'}</span>
 					{#snippet pending()}
-						<span class="skeleton" aria-label="Loading download count"></span>
+						<span class="skeleton" role="status" aria-label="Loading download count"></span>
 					{/snippet}
 					{#snippet failed()}
 						<span>—</span>

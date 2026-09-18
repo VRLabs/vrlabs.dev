@@ -1,4 +1,5 @@
-import { marked, type Token } from 'marked';
+import { Marked, type Token } from 'marked';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
 import sanitizeHtml from 'sanitize-html';
 import { TtlCache, durations } from './cache';
 
@@ -6,6 +7,22 @@ const requestTimeoutMs = 8000;
 const readmeCache = new TtlCache<string>(durations.readme, durations.failure);
 const branches = ['main', 'master'];
 const videoLink = /\.(mp4|webm|mov)(\?|$)|github\.com\/user-attachments\/assets\//i;
+const headingIdPrefix = 'user-content-';
+const headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+const renderer = new Marked(gfmHeadingId({ prefix: headingIdPrefix }), {
+	gfm: true,
+	hooks: {
+		processAllTokens(tokens) {
+			inlineInstallVideo(tokens);
+			return tokens;
+		}
+	}
+});
+
+function escapeAttribute(value: string) {
+	return value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+}
 
 function inlineInstallVideo(tokens: Token[]) {
 	let underInstallGuide = false;
@@ -24,7 +41,7 @@ function inlineInstallVideo(tokens: Token[]) {
 				type: 'html',
 				raw: token.raw,
 				block: true,
-				text: `<video src="${link.href}" controls preload="metadata" playsinline></video>`
+				text: `<video src="${escapeAttribute(link.href)}" controls preload="metadata" playsinline></video>`
 			};
 		}
 		underInstallGuide = false;
@@ -56,7 +73,8 @@ function sanitize(html: string, repo: string, branch: string) {
 			'picture'
 		]),
 		allowedAttributes: {
-			'*': ['align', 'id', 'title', 'width', 'height'],
+			'*': ['align', 'title', 'width', 'height'],
+			...Object.fromEntries(headings.map((heading) => [heading, ['id']])),
 			a: ['href', 'name', 'target', 'rel'],
 			img: ['src', 'srcset', 'alt', 'loading'],
 			video: ['src', 'controls', 'poster', 'preload', 'loop', 'muted', 'playsinline'],
@@ -69,15 +87,22 @@ function sanitize(html: string, repo: string, branch: string) {
 		allowedSchemes: ['http', 'https', 'mailto'],
 		allowedSchemesAppliedToAttributes: ['href', 'src', 'poster'],
 		transformTags: {
-			a: (tagName, attribs) => ({
-				tagName,
-				attribs: {
-					...attribs,
-					href: attribs.href ? absoluteUrl(attribs.href, blobBase) : '',
-					target: '_blank',
-					rel: 'noreferrer'
+			a: (tagName, attribs) => {
+				const href = attribs.href ?? '';
+				if (href.startsWith('#')) {
+					const fragment = `#${headingIdPrefix}${href.slice(1).toLowerCase()}`;
+					return { tagName, attribs: { ...attribs, href: fragment } };
 				}
-			}),
+				return {
+					tagName,
+					attribs: {
+						...attribs,
+						href: href ? absoluteUrl(href, blobBase) : '',
+						target: '_blank',
+						rel: 'noreferrer'
+					}
+				};
+			},
 			img: (tagName, attribs) => ({
 				tagName,
 				attribs: {
@@ -108,11 +133,7 @@ async function fetchReadme(repo: string) {
 
 async function renderReadme(repo: string) {
 	const { markdown, branch } = await fetchReadme(repo);
-	const tokens = marked.lexer(markdown, { gfm: true });
-
-	inlineInstallVideo(tokens);
-
-	const html = marked.parser(tokens, { gfm: true });
+	const html = await renderer.parse(markdown);
 	return sanitize(html, repo, branch);
 }
 

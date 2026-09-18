@@ -3,6 +3,7 @@ import { TtlCache, durations, type RetryAfterError } from './cache';
 import { githubToken } from './env';
 
 const requestTimeoutMs = 8000;
+const maxPages = 10;
 const statsCache = new TtlCache<PackageStats>(durations.stats, durations.failure);
 
 let rateLimitedUntil = 0;
@@ -41,10 +42,15 @@ function rateLimitError(repo: string, until: number) {
 	return error;
 }
 
-async function fetchStats(repo: string): Promise<PackageStats> {
+function nextPage(link: string | null) {
+	const match = link?.match(/<([^>]+)>;\s*rel="next"/);
+	return match ? match[1] : null;
+}
+
+async function fetchPage(repo: string, url: string) {
 	if (Date.now() < rateLimitedUntil) throw rateLimitError(repo, rateLimitedUntil);
 
-	const response = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=100`, {
+	const response = await fetch(url, {
 		headers: headers(),
 		signal: AbortSignal.timeout(requestTimeoutMs)
 	});
@@ -58,7 +64,27 @@ async function fetchStats(repo: string): Promise<PackageStats> {
 	}
 	if (!response.ok) throw new Error(`GitHub responded with ${response.status} for ${repo}`);
 
-	const releases = ((await response.json()) as Release[]).filter((release) => !release.draft);
+	return {
+		releases: (await response.json()) as Release[],
+		next: nextPage(response.headers.get('link'))
+	};
+}
+
+async function fetchReleases(repo: string) {
+	const releases: Release[] = [];
+	let url: string | null = `https://api.github.com/repos/${repo}/releases?per_page=100`;
+
+	for (let page = 0; url && page < maxPages; page++) {
+		const result = await fetchPage(repo, url);
+		releases.push(...result.releases);
+		url = result.next;
+	}
+
+	return releases.filter((release) => !release.draft);
+}
+
+async function fetchStats(repo: string): Promise<PackageStats> {
+	const releases = await fetchReleases(repo);
 	const downloads = releases
 		.flatMap((release) => release.assets)
 		.reduce((sum, asset) => sum + asset.download_count, 0);

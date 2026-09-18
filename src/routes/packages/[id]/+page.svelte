@@ -10,6 +10,8 @@
 	import { site } from '$lib/config';
 	import { formatCount, formatDate, questLabels } from '$lib/format';
 	import { getPackage, getReadme } from '$lib/packages.remote';
+	import VccDialog from '$lib/components/VccDialog.svelte';
+	import { vcc } from '$lib/vcc.svelte';
 	import type { PageProps } from './$types';
 
 	import '../../../styles/markdown.css';
@@ -27,6 +29,11 @@
 	function toggleCart() {
 		if (inCart) cart.remove(pkg.id);
 		else cart.add(pkg);
+	}
+
+	function addToVcc() {
+		const listing = data.listing;
+		if (listing) void vcc.launch(async () => listing);
 	}
 </script>
 
@@ -100,7 +107,7 @@
 			</dl>
 			<div class="actions">
 				{#if data.listing}
-					<Button href={data.listing.vccUrl} size="large">
+					<Button size="large" onclick={addToVcc}>
 						<Download aria-hidden="true" />
 						Add to VCC
 					</Button>
@@ -160,6 +167,13 @@
 		</section>
 	{/if}
 </article>
+
+<VccDialog
+	listing={vcc.listing}
+	loading={vcc.loading}
+	error={vcc.error}
+	onclose={() => vcc.close()}
+/>
 
 <style>
 	.breadcrumb {

@@ -62,7 +62,8 @@
 		const cartIds = listParam(params, 'cart');
 		if (!packageIds.length && !categoryIds.length && !cartIds.length) return;
 
-		replaceState(resolve('/packages'), page.state);
+		const hash = page.url.hash as '' | `#${string}`;
+		replaceState(resolve(`/packages${hash}`), page.state);
 
 		for (const id of cartIds) {
 			const pkg = findPackage(id);

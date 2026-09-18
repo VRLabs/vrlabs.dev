@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Category } from '$lib/types';
+	import { vcc } from '$lib/vcc.svelte';
 	import Button from './Button.svelte';
 	import CopyButton from './CopyButton.svelte';
 
@@ -8,12 +9,16 @@
 	}
 
 	let { category }: Props = $props();
+
+	function addToVcc() {
+		void vcc.launch(async () => ({ url: category.listingUrl, vccUrl: category.vccUrl }));
+	}
 </script>
 
 <header class="category-header">
 	<h2 id="category-{category.id}">{category.name}</h2>
 	<div class="actions">
-		<Button href={category.vccUrl} variant="secondary">Add category to VCC</Button>
+		<Button variant="secondary" onclick={() => addToVcc}>Add category to VCC</Button>
 		<CopyButton text={category.listingUrl} label="Copy listing URL" />
 	</div>
 </header>

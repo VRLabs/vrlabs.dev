@@ -10,7 +10,7 @@
 			? page.error?.message === 'Package not found'
 				? 'This package does not exist or is no longer listed.'
 				: 'The page you are looking for does not exist.'
-			: 'The packages could not be loaded right now. Please try again later.'
+			: 'This page could not be loaded right now. Please try again later.'
 	);
 </script>
 

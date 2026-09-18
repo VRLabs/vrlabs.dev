@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Background from '$lib/components/Background.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 
@@ -13,6 +14,7 @@
 	<meta name="keywords" content="VRChat, Unity, Packages, Avatars" />
 </svelte:head>
 
+<Background />
 <Header />
 <main id="main" class="main">
 	{@render children()}

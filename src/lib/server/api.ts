@@ -27,7 +27,7 @@ function normalizePackage(raw: ApiPackage): Package {
 		id: raw.name,
 		name: info.displayName || raw.name,
 		description: info.description ?? '',
-		category: raw.category.toLowerCase(),
+		category: (raw.category || 'other').toLowerCase(),
 		version: raw.latestVersion || info.version,
 		unity: info.unity ?? null,
 		license: info.license ?? null,
@@ -85,7 +85,7 @@ async function fetchListing(): Promise<Listing> {
 		.filter((entry) => entry?.packageInfo)
 		.map(normalizePackage);
 
-	return { categories: groupByCategory(packages), fetchedAt: new Date().toISOString() };
+	return { categories: groupByCategory(packages) };
 }
 
 export function getListing() {

@@ -28,7 +28,8 @@ export class TtlCache<T> {
 
 	constructor(
 		private readonly ttlMs: number,
-		private readonly failureTtlMs: number
+		private readonly failureTtlMs: number,
+		private readonly maxEntries = 1000
 	) {}
 
 	async get(key: string, load: () => Promise<T>): Promise<T> {
@@ -47,8 +48,16 @@ export class TtlCache<T> {
 		return this.#load(key, entry, load);
 	}
 
+	#set(key: string, entry: Entry<T>) {
+		this.#entries.set(key, entry);
+		if (this.#entries.size <= this.maxEntries) return;
+
+		const oldest = this.#entries.keys().next().value;
+		if (oldest !== undefined) this.#entries.delete(oldest);
+	}
+
 	#store(key: string, result: Ok<T> | Failed, expiresAt: number) {
-		this.#entries.set(key, { result, expiresAt, pending: null });
+		this.#set(key, { result, expiresAt, pending: null });
 	}
 
 	#failureExpiry(error: unknown) {
@@ -69,7 +78,7 @@ export class TtlCache<T> {
 			}
 		);
 
-		this.#entries.set(key, {
+		this.#set(key, {
 			result: entry?.result ?? { ok: false, error: undefined },
 			expiresAt: 0,
 			pending

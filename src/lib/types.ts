@@ -54,7 +54,6 @@ export interface Category {
 
 export interface Listing {
 	categories: Category[];
-	fetchedAt: string;
 }
 
 export interface PackageStats {
