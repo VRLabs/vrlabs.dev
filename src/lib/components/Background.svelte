@@ -1,3 +1,5 @@
+<!-- Not sure if I wanna add this back or not, keeping it here in case I want it later -->
+
 <div class="gradient" aria-hidden="true"></div>
 <div class="grid" aria-hidden="true"></div>
 <div class="noise" aria-hidden="true"></div>
