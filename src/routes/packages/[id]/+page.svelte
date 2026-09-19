@@ -10,7 +10,6 @@
 	import { site } from '$lib/config';
 	import { formatCount, formatDate, questLabels } from '$lib/format';
 	import { getPackage, getReadme } from '$lib/packages.remote';
-	import VccDialog from '$lib/components/VccDialog.svelte';
 	import { vcc } from '$lib/vcc.svelte';
 	import type { PageProps } from './$types';
 
@@ -162,13 +161,6 @@
 		</section>
 	{/if}
 </article>
-
-<VccDialog
-	listing={vcc.listing}
-	loading={vcc.loading}
-	error={vcc.error}
-	onclose={() => vcc.close()}
-/>
 
 <style>
 	.breadcrumb {

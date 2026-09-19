@@ -8,10 +8,12 @@
 		title: string;
 		onclose: () => void;
 		size?: 'medium' | 'large';
+		fill?: boolean;
 		children: Snippet;
+		footer?: Snippet;
 	}
 
-	let { open, title, onclose, size = 'medium', children }: Props = $props();
+	let { open, title, onclose, size = 'medium', fill = false, children, footer }: Props = $props();
 
 	const titleId = $props.id();
 
@@ -37,7 +39,7 @@
 	{onclose}
 	onclick={closeOnBackdropClick}
 	closedby="any"
-	class={[size]}
+	class={[size, fill && 'fill']}
 	aria-labelledby={titleId}
 >
 	<article class="scrollbar">
@@ -54,6 +56,9 @@
 			/>
 		</header>
 		<div class="content">{@render children()}</div>
+		{#if footer}
+			<footer>{@render footer()}</footer>
+		{/if}
 	</article>
 </dialog>
 
@@ -86,9 +91,15 @@
 				calc(100dvw - 2rem - env(safe-area-inset-left) - env(safe-area-inset-right))
 			);
 		}
+
+		&.fill {
+			height: calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+		}
 	}
 
 	article {
+		display: flex;
+		flex-direction: column;
 		overflow-y: auto;
 		width: 100%;
 	}
@@ -98,7 +109,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--s-4);
-		padding: var(--s-3) var(--s-3) var(--s-3) var(--s-6);
+		padding: var(--s-4) var(--s-6);
 		border-bottom: var(--border-style);
 		position: sticky;
 		top: 0;
@@ -115,10 +126,23 @@
 	}
 
 	.content {
+		flex: 1;
 		padding: var(--s-6);
 		display: flex;
 		flex-direction: column;
 		gap: var(--s-6);
+	}
+
+	footer {
+		position: sticky;
+		bottom: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-3);
+		padding: var(--s-4) var(--s-6);
+		border-top: var(--border-style);
+		background-color: var(--color-bg);
 	}
 
 	@keyframes fade-in {
@@ -146,7 +170,8 @@
 			padding-inline-start: var(--s-4);
 		}
 
-		.content {
+		.content,
+		footer {
 			padding: var(--s-4);
 		}
 	}

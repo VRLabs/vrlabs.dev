@@ -1,6 +1,9 @@
 <script lang="ts">
+	import BasketDialog from '$lib/components/BasketDialog.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import VccDialog from '$lib/components/VccDialog.svelte';
+	import { vcc } from '$lib/vcc.svelte';
 
 	import '../styles/normalize.css';
 	import '../styles/vars.css';
@@ -18,6 +21,14 @@
 	{@render children()}
 </main>
 <Footer />
+
+<BasketDialog />
+<VccDialog
+	listing={vcc.listing}
+	loading={vcc.loading}
+	error={vcc.error}
+	onclose={() => vcc.close()}
+/>
 
 <style>
 	.main {

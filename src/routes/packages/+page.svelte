@@ -4,14 +4,12 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { cart } from '$lib/cart.svelte';
-	import CartDrawer from '$lib/components/CartDrawer.svelte';
 	import CategoryHeader from '$lib/components/CategoryHeader.svelte';
 	import Filters from '$lib/components/Filters.svelte';
 	import PackageCard from '$lib/components/PackageCard.svelte';
 	import PageHeading from '$lib/components/PageHeading.svelte';
 	import ReadmeDialog from '$lib/components/ReadmeDialog.svelte';
 	import Seo from '$lib/components/Seo.svelte';
-	import VccDialog from '$lib/components/VccDialog.svelte';
 	import { filterCategories, type QuestFilter } from '$lib/filters';
 	import { listParam } from '$lib/format';
 	import { createListing, getCategoryListing, getListing, getStats } from '$lib/packages.remote';
@@ -111,20 +109,13 @@
 </div>
 
 <ReadmeDialog pkg={readmePkg} onclose={() => (readmePkg = null)} />
-<VccDialog
-	listing={vcc.listing}
-	loading={vcc.loading}
-	error={vcc.error}
-	onclose={() => vcc.close()}
-/>
-<CartDrawer />
 
 <style>
 	.categories {
 		display: flex;
 		flex-direction: column;
 		gap: var(--s-16);
-		padding-block: var(--s-8) var(--s-24);
+		padding-block: var(--s-8) var(--s-16);
 	}
 
 	section {

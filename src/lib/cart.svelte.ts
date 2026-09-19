@@ -41,6 +41,7 @@ function writeStorage(items: CartItem[]) {
 export class Cart {
 	items = $state<CartItem[]>([]);
 	open = $state(false);
+	additions = $state(0);
 
 	constructor() {
 		this.items = readStorage();
@@ -69,6 +70,7 @@ export class Cart {
 		if (this.has(pkg.id)) return false;
 
 		this.items.push({ id: pkg.id, name: pkg.name, dependencies: pkg.dependencies });
+		this.additions++;
 		writeStorage(this.items);
 
 		return true;

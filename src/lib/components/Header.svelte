@@ -4,8 +4,9 @@
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import { navLinks, socials } from '$lib/config';
+	import { navLinks } from '$lib/config';
 	import Logo from '$lib/icons/Logo.svelte';
+	import BasketButton from './BasketButton.svelte';
 	import Button from './Button.svelte';
 
 	let menu: HTMLElement | undefined = $state();
@@ -51,26 +52,6 @@
 	</ul>
 {/snippet}
 
-{#snippet socialList(names: string[])}
-	<ul class="social-list">
-		{#each socials.filter((social) => names.includes(social.name)) as social (social.name)}
-			<li>
-				<Button
-					href={social.href}
-					variant="ghost"
-					color="secondary"
-					square
-					class="social-link"
-					style="--button-icon-size: 24px"
-					aria-label={social.name}
-					title={social.name}
-					icon={social.icon}
-				/>
-			</li>
-		{/each}
-	</ul>
-{/snippet}
-
 <header class="header">
 	<div class="inner">
 		<div class="start">
@@ -92,8 +73,7 @@
 			<div class="mobile-only">{@render logo()}</div>
 		</nav>
 		<div class="end">
-			<div class="desktop-wide-only">{@render socialList(socials.map((s) => s.name))}</div>
-			<div class="mobile-wide-only">{@render socialList(['GitHub'])}</div>
+			<BasketButton />
 		</div>
 	</div>
 </header>
@@ -112,7 +92,6 @@
 		/>
 	</div>
 	<nav aria-label="Main">{@render navList()}</nav>
-	<div class="mobile-menu-socials">{@render socialList(socials.map((s) => s.name))}</div>
 </div>
 
 <style>
@@ -151,24 +130,15 @@
 		justify-content: flex-end;
 	}
 
-	.nav-list,
-	.social-list {
+	.nav-list {
 		list-style: none;
 		padding: 0;
 		display: flex;
 		align-items: center;
-	}
-
-	.nav-list {
 		gap: var(--s-6);
 	}
 
-	.social-list {
-		gap: var(--s-1);
-	}
-
-	.desktop-only,
-	.desktop-wide-only {
+	.desktop-only {
 		display: none;
 	}
 
@@ -178,16 +148,6 @@
 		}
 
 		.mobile-only {
-			display: none;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.desktop-wide-only {
-			display: block;
-		}
-
-		.mobile-wide-only {
 			display: none;
 		}
 	}
@@ -238,10 +198,6 @@
 		display: flex;
 		align-items: center;
 		height: var(--field-size);
-	}
-
-	.mobile-menu-socials .social-list {
-		justify-content: space-between;
 	}
 
 	@keyframes fade-in {
