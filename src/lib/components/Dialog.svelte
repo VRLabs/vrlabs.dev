@@ -9,10 +9,9 @@
 		onclose: () => void;
 		size?: 'medium' | 'large';
 		children: Snippet;
-		actions?: Snippet;
 	}
 
-	let { open, title, onclose, size = 'medium', children, actions }: Props = $props();
+	let { open, title, onclose, size = 'medium', children }: Props = $props();
 
 	const titleId = $props.id();
 
@@ -44,19 +43,15 @@
 	<article class="scrollbar">
 		<header>
 			<h2 id={titleId}>{title}</h2>
-			<div class="actions">
-				{@render actions?.()}
-				<Button
-					variant="ghost"
-					color="secondary"
-					size="small"
-					square
-					round
-					onclick={onclose}
-					aria-label="Close"
-					icon={X}
-				/>
-			</div>
+			<Button
+				variant="ghost"
+				color="secondary"
+				size="small"
+				square
+				onclick={onclose}
+				aria-label="Close"
+				icon={X}
+			/>
 		</header>
 		<div class="content">{@render children()}</div>
 	</article>
@@ -117,13 +112,6 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-	}
-
-	.actions {
-		display: flex;
-		align-items: center;
-		gap: var(--s-1);
-		flex-shrink: 0;
 	}
 
 	.content {

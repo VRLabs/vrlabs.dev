@@ -18,6 +18,7 @@
 		background-color: var(--color-bg-nav);
 		font-size: var(--font-xs);
 		color: var(--color-text-high);
+		height: var(--layout-nav-height);
 	}
 
 	.inner {
@@ -28,6 +29,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--s-4);
+		height: 100%;
 	}
 
 	a {
