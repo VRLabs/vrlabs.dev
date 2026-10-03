@@ -1,10 +1,12 @@
 <script lang="ts">
+	import CalendarSync from '@lucide/svelte/icons/calendar-sync';
 	import Download from '@lucide/svelte/icons/download';
 	import Image from '@lucide/svelte/icons/image';
 	import Info from '@lucide/svelte/icons/info';
+	import Tag from '@lucide/svelte/icons/tag';
 	import { resolve } from '$app/paths';
 	import { cart } from '$lib/cart.svelte';
-	import { formatCount, questLabels } from '$lib/format';
+	import { formatCount, formatDate, questLabels } from '$lib/format';
 	import Github from '$lib/icons/Github.svelte';
 	import Meta from '$lib/icons/Meta.svelte';
 	import { getStats } from '$lib/packages.remote';
@@ -43,15 +45,22 @@
 	}
 </script>
 
-<article class="card">
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		class="media"
-		onpointerenter={requestGif}
-		onpointerleave={() => (hovering = false)}
-		onfocusin={requestGif}
-		onfocusout={() => (hovering = false)}
-	>
+{#snippet downloads(count: string)}
+	<span class="fact">
+		<Download size={16} aria-hidden="true" />
+		<span>{count}</span>
+		<span class="visually-hidden">downloads</span>
+	</span>
+{/snippet}
+
+<article
+	class="card"
+	onpointerenter={requestGif}
+	onpointerleave={() => (hovering = false)}
+	onfocusin={requestGif}
+	onfocusout={() => (hovering = false)}
+>
+	<div class="media">
 		{#if pkg.previewImage}
 			<img
 				class={['preview', imageLoaded && 'loaded']}
@@ -112,26 +121,41 @@
 	</div>
 
 	<div class="body">
-		<h3><a href={resolve('/packages/[id]', { id: pkg.id })}>{pkg.name}</a></h3>
-		<p class="downloads muted">
-			<Download size={16} aria-hidden="true" />
-			{#if pkg.repo}
-				<svelte:boundary>
-					{const stats = await getStats(pkg.repo)}
-					<span>{stats ? formatCount(stats.downloads) : '—'}</span>
-					{#snippet pending()}
-						<span class="skeleton" role="status" aria-label="Loading download count"></span>
-					{/snippet}
-					{#snippet failed()}
-						<span>—</span>
-					{/snippet}
-				</svelte:boundary>
-			{:else}
-				<span>—</span>
-			{/if}
-			<span class="visually-hidden">downloads</span>
-		</p>
-		<p class="description muted">{pkg.description}</p>
+		<div class="content">
+			<h3><a href={resolve('/packages/[id]', { id: pkg.id })}>{pkg.name}</a></h3>
+			<p class="meta muted">
+				<span class="fact">
+					<Tag size={16} aria-hidden="true" />
+					<span class="visually-hidden">Version</span>
+					<span>{pkg.version}</span>
+				</span>
+				{#if pkg.repo}
+					<svelte:boundary>
+						{const stats = await getStats(pkg.repo)}
+						{@render downloads(stats ? formatCount(stats.downloads) : '—')}
+						{#if stats?.updatedAt}
+							<span class="fact">
+								<CalendarSync size={16} aria-hidden="true" />
+								<span class="visually-hidden">Updated</span>
+								<time datetime={stats.updatedAt}>{formatDate(stats.updatedAt)}</time>
+							</span>
+						{/if}
+						{#snippet pending()}
+							<span class="fact">
+								<Download size={16} aria-hidden="true" />
+								<span class="skeleton" role="status" aria-label="Loading download count"></span>
+							</span>
+						{/snippet}
+						{#snippet failed()}
+							{@render downloads('—')}
+						{/snippet}
+					</svelte:boundary>
+				{:else}
+					{@render downloads('—')}
+				{/if}
+			</p>
+			<p class="description muted">{pkg.description}</p>
+		</div>
 		<div class="actions">
 			<Button
 				variant={inCart ? 'outlined' : 'filled'}
@@ -158,6 +182,7 @@
 
 <style>
 	.card {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
@@ -227,6 +252,7 @@
 
 	.corner {
 		position: absolute;
+		z-index: 1;
 		top: var(--s-2);
 		display: flex;
 		align-items: center;
@@ -267,6 +293,9 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+	}
+
+	.content {
 		padding: var(--s-3);
 	}
 
@@ -277,19 +306,44 @@
 		& a {
 			color: inherit;
 
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				border-radius: var(--radius-box);
+			}
+
 			&:hover {
 				color: var(--color-text-accent);
 				text-decoration: none;
 			}
+
+			&:focus-visible {
+				outline: none;
+
+				&::after {
+					outline: var(--focus-ring);
+					outline-offset: -2px;
+				}
+			}
 		}
 	}
 
-	.downloads {
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0 var(--s-2);
+		min-height: 1lh;
+		font-size: var(--font-2xs);
+		margin-top: var(--s-1);
+	}
+
+	.fact {
 		display: flex;
 		align-items: center;
 		gap: var(--s-1);
 		height: 1lh;
-		font-size: var(--font-xs);
 	}
 
 	.skeleton {
@@ -302,13 +356,17 @@
 
 	.description {
 		font-size: var(--font-xs);
-		margin-block: var(--s-3) var(--s-4);
+		margin-top: var(--s-3);
 	}
 
 	.actions {
+		position: relative;
+		z-index: 5;
 		display: flex;
 		gap: var(--s-2);
 		margin-block-start: auto;
+		border-top: var(--border-style);
+		padding: var(--s-3);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
