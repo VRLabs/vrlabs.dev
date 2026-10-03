@@ -32,24 +32,27 @@
 
 <style>
 	footer {
-		margin-block-start: auto;
 		border-top: var(--border-style);
 		background-color: var(--color-bg-nav);
 		font-size: var(--font-xs);
 		color: var(--color-text-high);
-		min-height: var(--layout-nav-height);
+		height: var(--layout-nav-height);
 	}
 
 	.inner {
 		max-width: var(--layout-max-width);
-		min-height: inherit;
+		height: 100%;
 		margin-inline: auto;
-		padding: var(--s-3) var(--layout-main-padding);
+		padding-inline: var(--layout-main-padding);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
 		gap: var(--s-2) var(--s-4);
+
+		@media (min-width: 640px) {
+			justify-content: space-between;
+		}
 	}
 
 	.legal {
@@ -72,11 +75,5 @@
 		display: flex;
 		align-items: center;
 		gap: var(--s-1);
-	}
-
-	@media (min-width: 640px) {
-		.inner {
-			padding-inline: var(--s-10);
-		}
 	}
 </style>

@@ -152,12 +152,6 @@
 		}
 	}
 
-	@media (min-width: 640px) {
-		.inner {
-			padding-inline: var(--s-10);
-		}
-	}
-
 	.mobile-menu {
 		position: fixed;
 		inset: 0 auto 0 0;
