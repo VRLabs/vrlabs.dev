@@ -108,7 +108,7 @@
 		max-width: var(--layout-max-width);
 		height: 100%;
 		margin-inline: auto;
-		padding-inline: var(--layout-page-padding);
+		padding-inline: var(--layout-main-padding);
 		display: grid;
 		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
@@ -144,7 +144,7 @@
 
 	@media (min-width: 768px) {
 		.desktop-only {
-			display: block;
+			display: contents;
 		}
 
 		.mobile-only {

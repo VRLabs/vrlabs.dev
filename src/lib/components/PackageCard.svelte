@@ -83,18 +83,6 @@
 			<div class="placeholder"><Image size={64} strokeWidth={1.5} aria-hidden="true" /></div>
 		{/if}
 		<div class="corner start">
-			<Button
-				color="secondary"
-				size="small"
-				square
-				round
-				disabled={!pkg.repo}
-				onclick={() => onInfo(pkg)}
-				aria-label="Show README of {pkg.name}"
-				title="README"
-				icon={Info}
-				style="--button-icon-size: 24px"
-			/>
 			{#if pkg.repoUrl}
 				<Button
 					href={pkg.repoUrl}

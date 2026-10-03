@@ -44,7 +44,7 @@
 		max-width: var(--layout-max-width);
 		min-height: inherit;
 		margin-inline: auto;
-		padding: var(--s-3) var(--layout-page-padding);
+		padding: var(--s-3) var(--layout-main-padding);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;

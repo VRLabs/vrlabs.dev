@@ -36,17 +36,11 @@
 		max-width: var(--layout-max-width);
 		min-height: calc(100dvh - var(--layout-nav-height));
 		margin-inline: auto;
-		padding-inline: var(--layout-page-padding);
+		padding: var(--layout-main-padding);
 		background: radial-gradient(
 			600px 100px at 50% 0,
 			color-mix(in oklch, var(--color-text-accent) 10%, transparent) 0%,
 			transparent 100%
 		);
-	}
-
-	@media (min-width: 640px) {
-		.main {
-			padding-inline: var(--s-10);
-		}
 	}
 </style>

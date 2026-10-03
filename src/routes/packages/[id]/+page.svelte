@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import { cart } from '$lib/cart.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Download from '@lucide/svelte/icons/download';
@@ -47,14 +46,13 @@
 	{@html embedTag}
 </svelte:head>
 
-<nav class="breadcrumb" aria-label="Breadcrumb">
-	<a href={resolve('/packages')}>Packages</a>
-	<span aria-hidden="true">/</span>
-	<a href="{resolve('/packages')}#category-{data.category.id}">{data.category.name}</a>
-</nav>
-
 <article class="package">
-	<header class="hero">
+	<header class="header">
+		<h1>{pkg.name}</h1>
+		<p class="lead muted">{pkg.description}</p>
+	</header>
+
+	<aside class="sidebar" aria-label="Install and details">
 		{#if pkg.previewGif ?? pkg.previewImage}
 			<img
 				class="preview"
@@ -65,18 +63,57 @@
 				loading="eager"
 			/>
 		{/if}
-		<div class="summary">
-			<h1>{pkg.name}</h1>
-			<p class="lead muted">{pkg.description}</p>
-			<dl class="facts">
+
+		<div class="panel">
+			<div class="actions">
+				{#if data.listing}
+					<div class="row">
+						<Button onclick={addToVcc} icon={Download} expand>Add to VCC</Button>
+						<CopyButton text={data.listing.url} label="Copy listing URL" />
+					</div>
+				{/if}
+				<Button
+					variant={inCart ? 'outlined' : 'filled'}
+					color={inCart ? 'primary' : 'secondary'}
+					expand
+					onclick={toggleCart}
+					aria-pressed={inCart}
+				>
+					{inCart ? 'Remove from VCC list' : 'Add to VCC list'}
+				</Button>
+				{#if pkg.unityPackageUrl || pkg.repoUrl}
+					<div class="row">
+						{#if pkg.unityPackageUrl}
+							<Button
+								href={pkg.unityPackageUrl}
+								target="_self"
+								color="secondary"
+								variant="outlined"
+								expand
+								aria-label="Download {pkg.name} as .unitypackage"
+								icon={Download}
+							>
+								.unitypackage
+							</Button>
+						{/if}
+						{#if pkg.repoUrl}
+							<Button href={pkg.repoUrl} color="secondary" variant="outlined" expand icon={Github}>
+								GitHub
+							</Button>
+						{/if}
+					</div>
+				{/if}
+			</div>
+
+			<dl class="details">
 				<div>
 					<dt>Version</dt>
 					<dd>{pkg.version}</dd>
 				</div>
-				{#if pkg.unity}
+				{#if data.stats?.updatedAt}
 					<div>
-						<dt>Unity</dt>
-						<dd>{pkg.unity}</dd>
+						<dt>Updated</dt>
+						<dd><time datetime={data.stats.updatedAt}>{formatDate(data.stats.updatedAt)}</time></dd>
 					</div>
 				{/if}
 				{#if data.stats}
@@ -84,12 +121,12 @@
 						<dt>Downloads</dt>
 						<dd>{formatCount(data.stats.downloads)}</dd>
 					</div>
-					{#if data.stats.updatedAt}
-						<div>
-							<dt>Updated</dt>
-							<dd>{formatDate(data.stats.updatedAt)}</dd>
-						</div>
-					{/if}
+				{/if}
+				{#if pkg.unity}
+					<div>
+						<dt>Unity</dt>
+						<dd>{pkg.unity}</dd>
+					</div>
 				{/if}
 				{#if pkg.quest !== 'unknown'}
 					<div>
@@ -104,39 +141,19 @@
 					</div>
 				{/if}
 			</dl>
-			<div class="actions">
-				{#if data.listing}
-					<Button size="large" onclick={addToVcc} icon={Download}>Add to VCC</Button>
-					<CopyButton text={data.listing.url} label="Copy listing URL" size="large" />
-				{/if}
-				<Button
-					variant={inCart ? 'outlined' : 'filled'}
-					color={inCart ? 'primary' : 'secondary'}
-					size="large"
-					onclick={toggleCart}
-					aria-pressed={inCart}
-				>
-					{inCart ? 'Remove from VCC list' : 'Add to VCC list'}
-				</Button>
-				{#if pkg.unityPackageUrl}
-					<Button href={pkg.unityPackageUrl} target="_self" color="secondary" size="large">
-						Download .unitypackage
-					</Button>
-				{/if}
-				{#if pkg.repoUrl}
-					<Button href={pkg.repoUrl} color="secondary" size="large" icon={Github}>GitHub</Button>
-				{/if}
-			</div>
+
 			{#if pkg.dependencies.length}
-				<p class="dependencies muted">
-					Depends on
-					{#each pkg.dependencies as dependency, i (dependency)}
-						<code>{dependency}</code>{i < pkg.dependencies.length - 1 ? ', ' : ''}
-					{/each}
-				</p>
+				<div class="dependencies">
+					<h2>Dependencies</h2>
+					<ul>
+						{#each pkg.dependencies as dependency (dependency)}
+							<li><code>{dependency}</code></li>
+						{/each}
+					</ul>
+				</div>
 			{/if}
 		</div>
-	</header>
+	</aside>
 
 	{#if pkg.repo}
 		<section class="readme" aria-labelledby="readme-title">
@@ -163,46 +180,20 @@
 </article>
 
 <style>
-	.breadcrumb {
-		display: flex;
-		gap: var(--s-2);
-		padding-block: var(--s-6);
-		font-size: var(--font-sm);
-		font-weight: var(--weight-extra);
-		color: var(--color-text-high);
-	}
-
 	.package {
-		display: flex;
-		flex-direction: column;
-		gap: var(--s-8);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-areas: 'header' 'sidebar' 'readme';
+		gap: var(--s-6);
 		padding-block-end: var(--s-16);
 	}
 
-	.hero {
+	.header {
+		grid-area: header;
 		display: flex;
 		flex-direction: column;
-		gap: var(--s-6);
-		padding: var(--s-6);
-		border: var(--border-style);
-		border-top-color: var(--color-border-high);
-		border-radius: var(--radius-box);
-		background-color: var(--color-bg-high);
-	}
-
-	.preview {
-		width: 100%;
-		height: auto;
-		aspect-ratio: 16 / 9;
-		object-fit: cover;
-		border-radius: var(--radius-field);
-		background-color: var(--color-bg-higher);
-	}
-
-	.summary {
-		display: flex;
-		flex-direction: column;
-		gap: var(--s-4);
+		gap: var(--s-2);
+		padding-top: var(--s-16);
 	}
 
 	h1 {
@@ -215,45 +206,103 @@
 		font-size: var(--font-lg);
 	}
 
-	.facts {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(7rem, max-content));
-		gap: var(--s-3) var(--s-8);
-
-		& > div {
-			display: flex;
-			flex-direction: column;
-		}
+	.sidebar {
+		grid-area: sidebar;
+		border: var(--border-style);
+		border-top-color: var(--color-border-high);
+		border-radius: var(--radius-box);
+		background-color: var(--color-bg-high);
+		overflow: hidden;
+		position: static;
 	}
 
-	dt {
-		font-size: var(--font-2xs);
-		font-weight: var(--weight-extra);
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		color: var(--color-text-high);
+	.preview {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		border-bottom: var(--border-style);
+		background-color: var(--color-bg-higher);
 	}
 
-	dd {
-		font-size: var(--font-md);
-		font-weight: var(--weight-extra);
+	.panel {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-5);
+		padding: var(--s-4);
 	}
 
 	.actions {
 		display: flex;
-		flex-wrap: wrap;
+		flex-direction: column;
 		gap: var(--s-2);
 	}
 
+	.row {
+		display: flex;
+		gap: var(--s-2);
+	}
+
+	.details {
+		display: flex;
+		flex-direction: column;
+		font-size: var(--font-sm);
+
+		& > div {
+			display: flex;
+			justify-content: space-between;
+			gap: var(--s-4);
+			padding-block: var(--s-2);
+
+			& + div {
+				border-top: var(--border-style);
+			}
+		}
+	}
+
+	dt {
+		color: var(--color-text-high);
+	}
+
+	dd {
+		font-weight: var(--weight-extra);
+		text-align: end;
+	}
+
 	.dependencies {
-		font-size: var(--font-xs);
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-2);
+
+		& h2 {
+			font-size: var(--font-2xs);
+			font-weight: var(--weight-extra);
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+			color: var(--color-text-high);
+		}
+
+		& ul {
+			list-style: none;
+			padding: 0;
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--s-1);
+		}
 
 		& code {
+			display: inline-block;
+			padding: var(--s-0-5) var(--s-2);
+			border-radius: var(--radius-selector);
+			background-color: var(--color-bg-higher);
 			font-family: var(--font-mono);
+			font-size: var(--font-xs);
 		}
 	}
 
 	.readme {
+		grid-area: readme;
 		display: flex;
 		flex-direction: column;
 		gap: var(--s-4);
@@ -278,22 +327,27 @@
 		padding-block: var(--s-6);
 	}
 
-	@media (min-width: 768px) {
-		.hero {
-			display: grid;
-			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+	@media (min-width: 900px) {
+		.package {
+			grid-template-columns: minmax(0, 1fr) 20rem;
+			grid-template-areas: 'header header' 'readme sidebar';
 			align-items: start;
+			column-gap: var(--s-4);
+		}
+
+		.package:not(:has(.readme)) {
+			grid-template-areas: 'header sidebar';
+		}
+
+		.sidebar {
+			top: var(--layout-sticky-top);
+			position: sticky;
 		}
 	}
 
 	@media (max-width: 640px) {
-		.hero,
 		.readme {
 			padding: var(--s-4);
-		}
-
-		.actions > :global(*) {
-			flex: 1;
 		}
 	}
 </style>
